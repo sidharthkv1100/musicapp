@@ -1,96 +1,94 @@
-// 🎵 Track List
 const tracks = [
-    { name: "Enthinee Mizhi", src: "audio/enthinee_mizhi.mp3" },
-    { name: "Devakanyaka", src: "audio/devakanyaka.mp3" },
-    { name: "Etho Saayaana", src: "audio/etho_saayaana.mp3" },
-    { name: "Kaana Chembaka Poo", src: "audio/kaana_chembaka_poo.mp3" },
-    { name: "Kanmanipoove", src: "audio/kanmanipoove.mp3" }
+  { name: "Enthinee Mizhi", src: "audio/enthinee_mizhi.mp3" },
+  { name: "Devakanyaka", src: "audio/devakanyaka.mp3" },
+  { name: "Etho Saayaana", src: "audio/etho_saayaana.mp3" },
+  { name: "Kaana Chembaka Poo", src: "audio/kaana_chembaka_poo.mp3" },
+  { name: "Kanmanipoove", src: "audio/kanmanipoove.mp3" }
 ];
 
-// 🎧 State
-let currentTrackIndex = 0;
+let currentTrack = 0;
 let isPlaying = false;
 
-// 🎯 DOM Elements
-const trackNameEl = document.getElementById("track-name");
+const audio = new Audio();
+audio.volume = 0.5;
+
+// DOM
+const trackName = document.getElementById("track-name");
 const playPauseBtn = document.getElementById("playPauseBtn");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
-const progressSlider = document.getElementById("progress");
-const volumeSlider = document.getElementById("volume");
+const progress = document.getElementById("progress");
+const volume = document.getElementById("volume");
 
-// 🔊 Audio Object
-const audio = new Audio();
-audio.src = tracks[currentTrackIndex].src;
-audio.volume = 0.5;
-
-// 🔄 Load Track
-function loadTrack() {
-    audio.src = tracks[currentTrackIndex].src;
-    trackNameEl.textContent = tracks[currentTrackIndex].name;
-    progressSlider.value = 0;
+// Load Track
+function loadTrack(index) {
+  audio.src = tracks[index].src;
+  trackName.textContent = tracks[index].name;
+  progress.value = 0;
 }
-loadTrack();
 
-// ▶️ Play / ⏸ Pause
+loadTrack(currentTrack);
+
+// Play / Pause
 playPauseBtn.addEventListener("click", () => {
-    if (isPlaying) {
-        audio.pause();
-    } else {
-        audio.play();
-    }
+  if (!isPlaying) {
+    audio.play();
+  } else {
+    audio.pause();
+  }
 });
 
 audio.addEventListener("play", () => {
-    isPlaying = true;
-    playPauseBtn.textContent = "⏸️";
+  isPlaying = true;
+  playPauseBtn.textContent = "⏸";
 });
 
 audio.addEventListener("pause", () => {
-    isPlaying = false;
-    playPauseBtn.textContent = "▶️";
+  isPlaying = false;
+  playPauseBtn.textContent = "▶️";
 });
 
-// ⏭ Next Track
+// Next
 nextBtn.addEventListener("click", () => {
-    currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-    loadTrack();
-    audio.play();
+  currentTrack = (currentTrack + 1) % tracks.length;
+  loadTrack(currentTrack);
+  audio.play();
 });
 
-// ⏮ Previous Track
+// Previous
 prevBtn.addEventListener("click", () => {
-    currentTrackIndex =
-        (currentTrackIndex - 1 + tracks.length) % tracks.length;
-    loadTrack();
-    audio.play();
+  currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+  loadTrack(currentTrack);
+  audio.play();
 });
 
-// 📊 Update Progress Bar
+// Progress
 audio.addEventListener("timeupdate", () => {
-    if (audio.duration) {
-        const progressPercent =
-            (audio.currentTime / audio.duration) * 100;
-        progressSlider.value = progressPercent;
-    }
+  if (audio.duration) {
+    progress.value = (audio.currentTime / audio.duration) * 100;
+  }
 });
 
-// 🎯 Seek Song
-progressSlider.addEventListener("input", () => {
-    if (audio.duration) {
-        audio.currentTime =
-            (progressSlider.value / 100) * audio.duration;
-    }
+// Seek
+progress.addEventListener("input", () => {
+  if (audio.duration) {
+    audio.currentTime = (progress.value / 100) * audio.duration;
+  }
 });
 
-// 🔊 Volume Control
-volumeSlider.addEventListener("input", () => {
-    audio.volume = volumeSlider.value;
+// Volume
+volume.addEventListener("input", () => {
+  audio.volume = volume.value;
 });
 
-// 🔁 Auto Play Next Track
+// Auto Next
 audio.addEventListener("ended", () => {
-    currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-    loadTrack();
-    audio.play();
+  currentTrack = (currentTrack + 1) % tracks.length;
+  loadTrack(currentTrack);
+  audio.play();
+});
+
+// Debug (important)
+audio.addEventListener("error", () => {
+  console.error("❌ Audio not found:", audio.src);
 });
