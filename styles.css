@@ -1,0 +1,42 @@
+body {
+    background: #222;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.player-container {
+    text-align: center;
+    background: #333;
+    padding: 20px 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.controls button {
+    background: #444;
+    border: none;
+    padding: 12px;
+    margin: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 6px;
+}
+
+.controls button:hover {
+    background: #555;
+}
+
+.progress-container,
+.volume-container {
+    margin: 15px 0;
+}
+
+input[type="range"] {
+    width: 100%;
+}
